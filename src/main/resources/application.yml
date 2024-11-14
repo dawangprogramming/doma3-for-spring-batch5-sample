@@ -1,0 +1,32 @@
+spring:
+  batch:
+    job:
+      enabled: false
+#  metadate-datasource:
+#    jdbcUrl: jdbc:h2:mem:metadb
+#    username: meta
+#    password:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/musicdb?useSSL=false
+    username: prospring6
+    password: prospring6
+
+#  datasource:
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:appdb;DB_CLOSE_DELAY=-1
+#    username: app
+#    password:
+
+
+doma:
+  dialect: H2
+logging:
+  level:
+    org:
+      springframework:
+        jdbc:
+          datasource:
+            DataSourceTransactionManager: DEBUG
+
+

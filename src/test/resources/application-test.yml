@@ -1,0 +1,12 @@
+spring:
+  batch:
+    job:
+      enabled: false
+  datasource:
+    driver-class-name: org.hsqldb.jdbc.JDBCDriver
+    url: jdbc:hsqldb:mem:testdb111;DB_CLOSE_DELAY=-1
+    username: sa1
+    password: 
+  jpa:
+    hibernate.ddl-auto: create
+
