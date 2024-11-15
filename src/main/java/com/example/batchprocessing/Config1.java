@@ -17,11 +17,6 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 public class Config1 {
 
-
-
-	
-
-
 	 @Bean(name = "dataSource")
 	 @BatchDataSource
 //	 @ConfigurationProperties("spring.metadate-datasource")
