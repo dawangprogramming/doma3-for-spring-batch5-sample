@@ -4,14 +4,12 @@ package com.example.batchprocessing;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.seasar.doma.BatchInsert;
-import org.seasar.doma.Dao;
-import org.seasar.doma.Insert;
-import org.seasar.doma.Select;
+import org.seasar.doma.*;
 import org.seasar.doma.boot.ConfigAutowireable;
 import org.seasar.doma.jdbc.BatchResult;
 import org.seasar.doma.jdbc.Result;
 import org.seasar.doma.jdbc.SelectOptions;
+import org.seasar.doma.message.Message;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -25,6 +23,7 @@ public interface PersonDao {
     
     
     @Select
+    @Suppress(messages = { Message.DOMA4274 })
     Stream<Person> selectPerson();
 	
 }
