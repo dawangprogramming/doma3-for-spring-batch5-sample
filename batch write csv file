@@ -1,0 +1,65 @@
+@Configuration
+public class BatchConfiguration {
+
+    @Autowired
+    private JobBuilderFactory jobBuilderFactory;
+
+    @Autowired
+    private StepBuilderFactory stepBuilderFactory;
+
+    @Bean
+    public FlatFileItemWriter<Person> writer() {
+        FlatFileItemWriter<Person> writer = new FlatFileItemWriter<>();
+        writer.setResource(new FileSystemResource("output.csv"));
+        
+        DelimitedLineAggregator<Person> lineAggregator = new DelimitedLineAggregator<>();
+        lineAggregator.setDelimiter(",");
+        
+        BeanWrapperFieldExtractor<Person> fieldExtractor = new BeanWrapperFieldExtractor<>();
+        fieldExtractor.setNames(new String[] {"id", "name", "age"}); // Adjust fields based on your Person class
+        lineAggregator.setFieldExtractor(fieldExtractor);
+        
+        writer.setLineAggregator(lineAggregator);
+        return writer;
+    }
+
+    @Bean
+    public Tasklet csvGenerationTasklet() {
+        return new Tasklet() {
+            @Override
+            public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+                List<Person> people = Arrays.asList(
+                    new Person(1L, "John Doe", 30),
+                    new Person(2L, "Jane Doe", 25)
+                    // Add more sample data as needed
+                );
+                
+                FlatFileItemWriter<Person> writer = writer();
+                writer.open(new ExecutionContext());
+                
+                for (Person person : people) {
+                    writer.write(Collections.singletonList(person));
+                }
+                
+                writer.close();
+                return RepeatStatus.FINISHED;
+            }
+        };
+    }
+
+    @Bean
+    public Step csvGenerationStep() {
+        return stepBuilderFactory.get("csvGenerationStep")
+                .tasklet(csvGenerationTasklet())
+                .build();
+    }
+
+    @Bean
+    public Job csvGenerationJob() {
+        return jobBuilderFactory.get("csvGenerationJob")
+                .start(csvGenerationStep())
+                .build();
+    }
+}
+
+
